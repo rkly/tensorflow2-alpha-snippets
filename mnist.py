@@ -32,6 +32,11 @@ class MNIST(Model):
   
 model = MNIST()
 
+# Get the concrete function from the Keras model.
+run_model = tf.function(lambda x : model(x))
+# Save the concrete function.
+concrete_func = run_model.get_concrete_function(tf.TensorSpec(shape=(None, 28, 28, 1), dtype=tf.float32))
+
 loss_object = tf.keras.losses.SparseCategoricalCrossentropy()
 
 optimizer = tf.keras.optimizers.Adam()
@@ -74,3 +79,7 @@ for epoch in range(EPOCHS):
     print (template.format(epoch + 1, train_loss.result(), train_accuracy.result() * 100, test_loss.result(), test_accuracy.result() * 100))
 
 model.save_weights('keras_saved', save_format='h5')
+
+converter = tf.lite.TFLiteConverter.from_concrete_function(concrete_func)
+tflite_model = converter.convert()
+open("keras_mnist.tflite", "wb").write(tflite_model)
