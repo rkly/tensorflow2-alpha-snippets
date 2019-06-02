@@ -76,7 +76,7 @@ for epoch in range(EPOCHS):
         test_step(test_image, test_label)
   
     template = 'Epoch {}, Loss: {}, Accuracy: {}, Test Loss: {}, Test Accuracy: {}'
-    print (template.format(epoch + 1, train_loss.result(), train_accuracy.result() * 100, test_loss.result(), test_accuracy.result() * 100))
+    print(template.format(epoch + 1, train_loss.result(), train_accuracy.result() * 100, test_loss.result(), test_accuracy.result() * 100))
 
 model.save_weights('keras_saved', save_format='h5')
 
